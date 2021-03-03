@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 26-01-2021 a las 16:51:28
+-- Tiempo de generación: 03-03-2021 a las 19:33:13
 -- Versión del servidor: 5.7.24
 -- Versión de PHP: 7.4.7
 
@@ -39,7 +39,7 @@ CREATE TABLE `bien` (
   `bien_estado` tinyint(1) DEFAULT NULL,
   `bien_color_cod` int(11) DEFAULT NULL,
   `bien_serial` varchar(20) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `bien_clasificacion_cod` int(11) DEFAULT NULL,
+  `bien_clasificacion_cod` char(2) COLLATE utf8_spanish_ci NOT NULL,
   `bien_link_bien` char(7) COLLATE utf8_spanish_ci DEFAULT NULL,
   `bien_mod_cod` int(11) DEFAULT NULL,
   `bien_sexo` varchar(1) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -67,9 +67,21 @@ CREATE TABLE `cargos` (
 --
 
 CREATE TABLE `categoria` (
-  `cat_cod` int(11) NOT NULL,
+  `cat_cod` char(2) COLLATE utf8_spanish_ci NOT NULL,
   `cat_des` varchar(20) COLLATE utf8_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`cat_cod`, `cat_des`) VALUES
+('BS', 'BIEN SEMOVIENTE'),
+('EL', 'BIEN ELECTRONICO'),
+('IN', 'BIEN INMUEBLE'),
+('MA', 'BIEN MATERIAL'),
+('OF', 'MATERIAL DE OFICINA'),
+('TP', 'TRANSPORTE');
 
 -- --------------------------------------------------------
 
@@ -78,9 +90,10 @@ CREATE TABLE `categoria` (
 --
 
 CREATE TABLE `clasificacion` (
-  `cla_cod` int(11) NOT NULL,
+  `cla_cod` char(2) COLLATE utf8_spanish_ci NOT NULL,
   `cla_des` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `cla_cat_cod` int(11) DEFAULT NULL
+  `cla_cat_cod` char(2) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `cla_estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
@@ -93,6 +106,23 @@ CREATE TABLE `colores` (
   `color_cod` int(11) NOT NULL,
   `color_des` varchar(20) COLLATE utf8_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `colores`
+--
+
+INSERT INTO `colores` (`color_cod`, `color_des`) VALUES
+(1, 'ROJO'),
+(2, 'AZUL'),
+(3, 'AMARILLO'),
+(4, 'MARRON'),
+(5, 'MORADO'),
+(6, 'VERDE'),
+(7, 'ROSADO'),
+(8, 'GRIS'),
+(9, 'NEGRO'),
+(10, 'BLANCO'),
+(11, 'ANARANJADO');
 
 -- --------------------------------------------------------
 
@@ -135,7 +165,7 @@ CREATE TABLE `dependencia` (
 CREATE TABLE `marcas` (
   `mar_cod` int(11) NOT NULL,
   `mar_des` varchar(30) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `mar_categoria_cod` int(11) DEFAULT NULL,
+  `mar_categoria_cod` char(2) COLLATE utf8_spanish_ci DEFAULT NULL,
   `mar_estado` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
@@ -155,10 +185,10 @@ CREATE TABLE `modelos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `movimmientos`
+-- Estructura de tabla para la tabla `movimientos`
 --
 
-CREATE TABLE `movimmientos` (
+CREATE TABLE `movimientos` (
   `mov_com_incorporacion` char(10) COLLATE utf8_spanish_ci NOT NULL,
   `mov_com_reasignacion` char(10) COLLATE utf8_spanish_ci DEFAULT NULL,
   `mov_com_desincorporacion` char(10) COLLATE utf8_spanish_ci DEFAULT NULL,
@@ -225,7 +255,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`user_id`, `user_clave`, `user_nombre`, `user_estado`, `user_pregunta1`, `user_respuesta1`, `user_pregunta2`, `user_respuesta2`, `user_permisos`, `user_photo`) VALUES
-('27132642', '$2y$10$31f.2HexBrc1fMv8nAuMcuQG//w/Qa9kARfEt07MJdQtEAaH80ip6', 'Admin', 1, 'pregunta 1', 'respuesta 1', 'pregunta 2', 'respuesta 2', 5, 'Views/Img/Default/user.png');
+('27132642', '$2y$12$vqiSBM6l.das1W2Uv5cVLeXs7hUC/eYD.iq23E4LFkLjYbluENbEO', 'Admin', 1, 'pregunta 1', 'respuesta 1', 'pregunta 2', 'respuesta 2', 5, 'Views/Img/Default/user.png');
 
 --
 -- Índices para tablas volcadas
@@ -295,9 +325,9 @@ ALTER TABLE `modelos`
   ADD KEY `mod_marca_cod` (`mod_marca_cod`);
 
 --
--- Indices de la tabla `movimmientos`
+-- Indices de la tabla `movimientos`
 --
-ALTER TABLE `movimmientos`
+ALTER TABLE `movimientos`
   ADD KEY `mov_com_incorporacion` (`mov_com_incorporacion`),
   ADD KEY `mov_com_reasignacion` (`mov_com_reasignacion`),
   ADD KEY `mov_com_desincorporacion` (`mov_com_desincorporacion`),
@@ -325,6 +355,46 @@ ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `cargos`
+--
+ALTER TABLE `cargos`
+  MODIFY `car_cod` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `colores`
+--
+ALTER TABLE `colores`
+  MODIFY `color_cod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT de la tabla `dependencia`
+--
+ALTER TABLE `dependencia`
+  MODIFY `dep_cod` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `marcas`
+--
+ALTER TABLE `marcas`
+  MODIFY `mar_cod` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `modelos`
+--
+ALTER TABLE `modelos`
+  MODIFY `mod_cod` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `nucleo`
+--
+ALTER TABLE `nucleo`
+  MODIFY `nuc_cod` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -332,62 +402,62 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `bien`
 --
 ALTER TABLE `bien`
-  ADD CONSTRAINT `bien_ibfk_1` FOREIGN KEY (`bien_clasificacion_cod`) REFERENCES `clasificacion` (`cla_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `bien_ibfk_2` FOREIGN KEY (`bien_mod_cod`) REFERENCES `modelos` (`mod_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `bien_ibfk_3` FOREIGN KEY (`bien_color_cod`) REFERENCES `colores` (`color_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Bien_Cor` FOREIGN KEY (`bien_color_cod`) REFERENCES `colores` (`color_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Bien_Mod` FOREIGN KEY (`bien_mod_cod`) REFERENCES `modelos` (`mod_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `bien_cla` FOREIGN KEY (`bien_clasificacion_cod`) REFERENCES `clasificacion` (`cla_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `clasificacion`
 --
 ALTER TABLE `clasificacion`
-  ADD CONSTRAINT `clasificacion_ibfk_1` FOREIGN KEY (`cla_cat_cod`) REFERENCES `categoria` (`cat_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Cla_Cat` FOREIGN KEY (`cla_cat_cod`) REFERENCES `categoria` (`cat_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `comprobantes`
 --
 ALTER TABLE `comprobantes`
-  ADD CONSTRAINT `comprobantes_ibfk_1` FOREIGN KEY (`com_dep_user`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `comprobantes_ibfk_2` FOREIGN KEY (`com_dep_ant`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Com_Dep_Ant` FOREIGN KEY (`com_dep_ant`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Com_Dep_User` FOREIGN KEY (`com_dep_user`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `dependencia`
 --
 ALTER TABLE `dependencia`
-  ADD CONSTRAINT `dependencia_ibfk_1` FOREIGN KEY (`dep_nucleo_cod`) REFERENCES `nucleo` (`nuc_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Dep_Nuc` FOREIGN KEY (`dep_nucleo_cod`) REFERENCES `nucleo` (`nuc_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `marcas`
 --
 ALTER TABLE `marcas`
-  ADD CONSTRAINT `marcas_ibfk_1` FOREIGN KEY (`mar_categoria_cod`) REFERENCES `categoria` (`cat_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Mar_Cat` FOREIGN KEY (`mar_categoria_cod`) REFERENCES `categoria` (`cat_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `modelos`
 --
 ALTER TABLE `modelos`
-  ADD CONSTRAINT `modelos_ibfk_1` FOREIGN KEY (`mod_marca_cod`) REFERENCES `marcas` (`mar_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Mod_Mar` FOREIGN KEY (`mod_marca_cod`) REFERENCES `marcas` (`mar_cod`) ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `movimmientos`
+-- Filtros para la tabla `movimientos`
 --
-ALTER TABLE `movimmientos`
-  ADD CONSTRAINT `movimmientos_ibfk_1` FOREIGN KEY (`mov_com_incorporacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `movimmientos_ibfk_2` FOREIGN KEY (`mov_com_reasignacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `movimmientos_ibfk_3` FOREIGN KEY (`mov_com_desincorporacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `movimmientos_ibfk_4` FOREIGN KEY (`mov_bien_cod`) REFERENCES `bien` (`bien_cod`) ON UPDATE CASCADE;
+ALTER TABLE `movimientos`
+  ADD CONSTRAINT `movimientos_ibfk_1` FOREIGN KEY (`mov_com_incorporacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `movimientos_ibfk_2` FOREIGN KEY (`mov_com_reasignacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `movimientos_ibfk_3` FOREIGN KEY (`mov_com_desincorporacion`) REFERENCES `comprobantes` (`com_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `movimientos_ibfk_4` FOREIGN KEY (`mov_bien_cod`) REFERENCES `bien` (`bien_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `nucleo`
 --
 ALTER TABLE `nucleo`
-  ADD CONSTRAINT `nucleo_ibfk_1` FOREIGN KEY (`nuc_nucleo_principal`) REFERENCES `nucleo` (`nuc_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Nuc_principal` FOREIGN KEY (`nuc_nucleo_principal`) REFERENCES `nucleo` (`nuc_cod`) ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `personas`
 --
 ALTER TABLE `personas`
-  ADD CONSTRAINT `personas_ibfk_1` FOREIGN KEY (`per_car_cod`) REFERENCES `cargos` (`car_cod`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `personas_ibfk_2` FOREIGN KEY (`per_dep_cod`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `Per_Car` FOREIGN KEY (`per_car_cod`) REFERENCES `cargos` (`car_cod`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `Per_Dep` FOREIGN KEY (`per_dep_cod`) REFERENCES `dependencia` (`dep_cod`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
